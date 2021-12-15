@@ -133,19 +133,19 @@ $\Sigma_i(\alpha_i)$ - четное число.
 \item $AtMostOne(x_1, \dots, x_n)$ - истина, если среди $x_1, \dots, x_n$ не более одной истиной переменной.
 \item \[\bigwedge_{1 \le i < j \le n}(\lnot x_i \vee \lnot x_j)\]
 \item Сколько дизъюнктов в такой формуле? Можно ли сделать меньше?
-\item $AtMosttOne(x_1, x_2, x_3, y) \vee AtMosttOne(\lnot y, x_4, \dots, x_n)$
+\item $AtMostOne(x_1, x_2, x_3, y) \vee AtMostOne(\lnot y, x_4, \dots, x_n)$
 \end{itemize}
 \end{frame}
 
 \begin{frame}{AtMostOne}
 \begin{itemize}
-\item $AtMosttOne(x_1, x_2)$:\newline
+\item $AtMostOne(x_1, x_2)$:\newline
 \end{itemize}
 \end{frame}
 
 \begin{frame}{AtMostOne}
 \begin{itemize}
-\item $AtMosttOne(x_1, x_2)$:\newline
+\item $AtMostOne(x_1, x_2)$:\newline
 $\phi_1 = \lnot x_1 \vee \lnot x_2$\newline
 $\phi_2 = (\lnot x_1 \vee y) \wedge (y \lnot x_2)$\newline
 \end{itemize}
@@ -153,7 +153,7 @@ $\phi_2 = (\lnot x_1 \vee y) \wedge (y \lnot x_2)$\newline
 
 \begin{frame}{AtMostOne}
 \begin{itemize}
-\item $AtMosttOne(x_1, x_2)$:\newline
+\item $AtMostOne(x_1, x_2)$:\newline
 $\phi_1 = \lnot x_1 \vee \lnot x_2$\newline
 $\phi_2 = (\lnot x_1 \vee y) \wedge (y \lnot x_2)$\newline
 \item Они эквивалентны?
@@ -162,7 +162,7 @@ $\phi_2 = (\lnot x_1 \vee y) \wedge (y \lnot x_2)$\newline
 
 \begin{frame}{AtMostOne}
 \begin{itemize}
-\item $AtMosttOne(x_1, x_2)$:\newline
+\item $AtMostOne(x_1, x_2)$:\newline
 $\phi_1 = \lnot x_1 \vee \lnot x_2$\newline
 $\phi_2 = (\lnot x_1 \vee y) \wedge (y \lnot x_2)$\newline
 \item Они эквивалентны?
@@ -173,7 +173,7 @@ $\phi_2 = (\lnot x_1 \vee y) \wedge (y \lnot x_2)$\newline
 
 \begin{frame}{AtMostOne}
 \begin{itemize}
-\item $AtMosttOne(x_1, x_2)$:\newline
+\item $AtMostOne(x_1, x_2)$:\newline
 $\phi_1 = \lnot x_1 \vee \lnot x_2$\newline
 $\phi_2 = (\lnot x_1 \vee y) \wedge (y \lnot x_2)$\newline
 \item Они эквивалентны?
@@ -185,7 +185,7 @@ $\phi_2 = (\lnot x_1 \vee y) \wedge (y \lnot x_2)$\newline
 
 \begin{frame}{AtMostOne}
 \begin{itemize}
-\item $AtMosttOne(x_1, x_2)$:\newline
+\item $AtMostOne(x_1, x_2)$:\newline
 $\phi_1 = \lnot x_1 \vee \lnot x_2$\newline
 $\phi_2 = (\lnot x_1 \vee y) \wedge (y \lnot x_2)$\newline
 \item Они эквивалентны?
@@ -198,7 +198,7 @@ $\phi_2 = (\lnot x_1 \vee y) \wedge (y \lnot x_2)$\newline
 
 \begin{frame}{AtMostOne}
 \begin{itemize}
-\item $AtMosttOne(x_1, x_2)$:\newline
+\item $AtMostOne(x_1, x_2)$:\newline
 $\phi_1 = \lnot x_1 \vee \lnot x_2$\newline
 $\phi_2 = (\lnot x_1 \vee y) \wedge (y \lnot x_2)$\newline
 \item Они эквивалентны?
@@ -332,15 +332,15 @@ $F_2 = (\lnot T_2 \vee Q) \wedge (\lnot T_2 \vee R) \wedge (T_2 \vee \lnot Q \ve
 \begin{itemize}
 \item Комментарий c comment
 \item Заголовок p cnf n m: n - количество переменных в дизюнкте, m - количество дизюнктов
-\item Дизъюнкт - описание дизъюнкта: номера переменных, который в него входят, \"-\" - если переменная ложная, в конце всегда 0
+\item Дизъюнкт - описание дизъюнкта: номера переменных, который в него входят, <<->> - если переменная ложная, в конце всегда 0
 \end{itemize}
 \end{frame}
 
 \begin{frame}{DIMACS формат}
 \begin{itemize}
-\item Комментарий $c comment$
-\item Заголовок $p cnf n m$: n - количество переменных в дизюнкте, m - количество дизюнктов
-\item Дизъюнкт - описание дизъюнкта: номера переменных, который в него входят, \"-\" - если переменная ложная, в конце всегда 0
+\item Комментарий c comment
+\item Заголовок p cnf n m: n - количество переменных в дизюнкте, m - количество дизюнктов
+\item Дизъюнкт - описание дизъюнкта: номера переменных, который в него входят, <<->> - если переменная ложная, в конце всегда 0
 \item $(a \vee b \vee \lnot c) \wedge (\lnot a \vee \lnot b \vee c) \wedge (b \vee c \vee \lnot d)$
 \item c example\newline
 p cnf 4 7\newline
