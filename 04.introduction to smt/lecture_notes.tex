@@ -1,0 +1,112 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8x]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+\usepackage[pdf]{graphviz}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage[pdftex,unicode]{hyperref}
+\usepackage{amsfonts}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{enumitem}
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+
+\lstset{
+    frame=tb,
+    tabsize=4,
+    showstringspaces=false,
+    numbers=left,
+    commentstyle=\color{green},
+    keywordstyle=\color{blue},
+    stringstyle=\color{red}
+}
+
+\newtheorem{algo}{Алгоритм}
+\newtheorem{definition}{Опредление}
+\newtheorem{comment}{Комментарий}
+\newtheorem{problem}{Задача}
+\newtheorem{thesis}{Тезис}
+
+\begin{document}
+Введем некоторые определения:
+\begin{itemize}
+\item $at(\phi)$ - множество атомов в формуле $\phi$
+\item $at_i(\phi)$ - некоторый заданный порядок этих атомов
+\item Атом $a$ сопоставим с булевой переменной $e(a)$ (такую процедуру будем называть булевское кодирование)
+\item $e(t)$ - булева формула, полученную булевым кодированием каждого атома формулы $t$ (такую формулу будем называть
+пропозиционным скилетом формулы $t$)
+\end{itemize}
+Рассмотрим следующий пример: $\phi := x = y \vee x = z$. Тогда $at(\phi) = \{at_1, at_2\}$, $at_1 := x = y$, $at_2 := x = z$.
+Сопоставим $x = y$ булеву переменную $e(x = y) = b_1$ и $x = z$ булеву переменную $e(x = z) = b_2$. Получаем
+$e(\phi) = b_1 \vee b_2$.\newline
+Пусть $\alpha$ - некоторая (возможно, частичная) оценка формулы $e(\phi)$, например для формулы выше пусть $\alpha = \{e(at_1)
+\rightarrow FALSE, e(at_2) \rightarrow TRUE\}$.\newline
+\begin{equation*}
+Th(at_i, \alpha) =
+\begin{cases}
+at_i &\text{если $\alpha(at_i) = TRUE$}\\
+\lnot at_i &\text{иначе}
+\end{cases}
+\end{equation*}
+$Th(\alpha) = \{Th(at_i, \alpha)| для всех e(at_i), оцененных \alpha\}$, $\overline{Th(\alpha)}$ - конъюнкция всех элементов их
+$Th(\alpha)$\newline
+Пусть нам данн алгоритм (назовём его $Deduction$), который может решить $\overline{Th(\alpha)}$. Опишем алгоритм решение
+SMT-формул, имея $Deduction$:\newline
+\begin{itemize}
+\item Вычислим $B = e(\phi)$
+\item Отправим $B$ SAT-решателю
+\item Если получили "UNSAT", то возвращаем "UNSAT"
+\item Если получили "UNKNOWN", то возвращаем "UNKNOWN"
+\item Если получили некоторую $\alpha$, то вычисляем $Deduction$ от $\overline{Th(\alpha)}$
+\item Если получили "SAT", то возвращаем "SAT"
+\item Если получили "UNKNOWN", то возвращаем "UNKNOWN"
+\item Если получили "UNSAT", то $B = B \wedge$ "блокирующий дизюнкт" $t$ и начинаем со второго пункта
+\end{itemize}
+Опишем подробнее свойства "блокирующего дизюнкта" (так же называют леммой):\newline
+\begin{itemize}
+\item $t$ - тавтология в $T$
+\item $t$ - состоит только из атомов из $\phi$
+\item $t$ - "блокирует" $\alpha$, т.е. при отправлении $B$ SAT-решателю мы не сможем снова получить $\alpha$
+\end{itemize}
+Предположим, что в предыдущем примере оценка оказалась "UNSAT", тогда можно привести такой "блокирующий дизюнкт": $t := e(at_1)
+\vee \lnot e(at_2)$ (т.е. мы просто взяли дизъюнкцию отрицаний атомов). Есть и другие способы найти блокирующий дизюнкт,
+например, часто можно взять дизъюнкцию части отрицаний атомов, если они "UNSAT" в данной теории.\newline
+
+Есть более эффективные алгоритмы решения SMT задач, но для этого нам нужно изучить, как работает SAT решатель. В процессе работы
+ленивого алгоритма может возникнуть много блокирующих дизюнктов. Многие теории можно свести к SAT задаче, но обычно существуют
+более эффективные алгоритмы решения теорий.\newline
+
+Решим с помощью SMT-решателя задачу с прошлой лекции: задача о расскарске графа. Имеется граф $G = (V, E)$. Можно ли его вершини
+расскрасить в $k$ цветов так, чтобы никакие соседние вершины не были раскрашены в один и тот же цвет? Постороим следующую
+систему уравнений:\newline
+\begin{itemize}
+\item $x_i$ - целые
+\item $1 \le x_i \le c$
+\item $x_i \neq x_j$ для $(x_i, x_j) \in E$
+\end{itemize}
+Для решения такой системы нам понадобится SMT-решатель, умеющий разрешать теорию равенства.\newline
+В качестве упражнения предоставляются следующие задачи:
+\begin{itemize}
+\item Судоку (заполнить поле числами)
+\item Сапер (указать, на какую клетку можно "кликнуть")
+\end{itemize}
+
+В конце лекции разбрем следующую задачу - даны две программы, a и b:\newline
+Программа a:\newline
+int i, out\_a = in;\newline
+for (int i = 0; i < 2; ++i) out\_a = out\_a * i;\newline
+return out\_a;\newline
+Программа b:\newline
+int out\_b = (in * in) * in;\newline
+return out\_b;\newline
+Нужно проверить, являются ли они эквивалентными друг другу. Для этого построим формулы, описывающие связь между входом и выходом
+программ:\newline
+$\phi_a := (out\_a_0 = in\_a_0) \wedge (out\_a_1 = out\_a_0 * in\_a_0) \wedge (out\_a_2 = out\_a_1 * in\_a_0)$\newline
+$\phi_b := out\_b_0 = (in\_b_0 * in\_b_0) * in\_b_0$\newline
+Чтобы программы были эквивалентны, должно выполняться:\newline
+$(in\_a_0 = in\_b_0) \wedge \phi_a \wedge \phi_b \rightarrow out\_a_2 = out\_b_0$\newline
+Проверку такой формулы на выполнимость может осуществить SMT-решатель, умеющий разрешать теорию равенства.\newline
+\end{document}
