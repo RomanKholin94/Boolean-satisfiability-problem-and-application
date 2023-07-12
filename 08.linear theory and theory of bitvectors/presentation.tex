@@ -24,10 +24,10 @@
 
 \begin{document}
 
-\title{Задачи разрешимости логических формул и приложения\newline Лекция 8. Линейная логика. Логика битовых веторов}
+\title{Задачи разрешимости логических формул и приложения\newline Лекция 6. Линейная логика. Логика битовых векторов}
 \author{Роман Холин}
 \institute{Московский государственный университет}
-\date{Москва, 2021}
+\date{Москва, 2022}
 
 \begin{frame}
 \includegraphics[scale=0.5]{../decision-procedure.png}
@@ -35,73 +35,137 @@
 
 \frame{\titlepage}
 
-\begin{frame}{Два приминения EUF}
-\begin{itemize}
-\item Проверка процесса компиляции с помощью валидации трансляций
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Два приминения EUF}
-\begin{itemize}
-\item Доказательство эквивалентности двух схем
-\item Проверка процесса компиляции с помощью валидации трансляций
-\end{itemize}
+\begin{frame}{Логика линейной арифметики}
+\includegraphics[scale=0.5]{linear_syntax.png}
 \end{frame}
 
 \begin{frame}{Логика линейной арифметики}
-$formula: formula \vee formula | \lnot formula | (formula) | atom$\newline
-$atom: sum op sum$\newline
-$op: = | \le | <$\newline
-$sum: term|sum + term$\newline
-$term: identifier | constant | constant identifier$\newline
-\end{frame}
-
-\begin{frame}{Логика линейной арифметики}
-$formula: formula \vee formula | \lnot formula | (formula) | atom$\newline
-$atom: sum op sum$\newline
-$op: = | \le | <$\newline
-$sum: term|sum + term$\newline
-$term: identifier | constant | constant identifier$\newline
+\includegraphics[scale=0.5]{linear_syntax.png}
 $2z_1 + 3z_2 \le 5 \wedge z_2 + 5z_2 - 10z_3 \ge 6 \wedge z1 + z3 = 3$
 \end{frame}
 
-\begin{frame}{Логика линейной арифметики}
-Пример: демо
-\end{frame}
-
 \begin{frame}{Домен}
 \begin{itemize}
-\item Рациональные числа
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Домен}
-\begin{itemize}
-\item Рациональные числа
 \item Целые числа
+\item Рациональные числа
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Рациональные числа}
+\begin{frame}{Домен}
 \begin{itemize}
-\item Существует полиномиальный алгоритм решения
-\item Используется Симлекс метод, который в худшем случае экспоненциальный, но даёт хорошие результаты на реальных данных
+\item Целые числа - целочисленное линейное программирование
+\item Рациональные числа - симлекс метод
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Целые числа}
-\begin{itemize}
-\item NP-трудная задача
-\item Задача целочисленного линейного программирования
-\end{itemize}
+\begin{frame}{Логика битовых векторов}
+\includegraphics[scale=0.5]{bit_syntax.png}
 \end{frame}
 
-\begin{frame}{Логика линейной арифметики}
-$formula: formula \vee formula | \lnot formula | (formula) | atom$\newline
-$atom: term rel term | Boolean-Identifier | term[constant]$\newline
-$rel: = < | =$\newline
-$term: term op term | identifier | ~term | constant | atom?term:term$\newline
-$op: + | - | \times | / | << | >> | \& | | | \oplus | \circ$\newline
+\begin{frame}{Мотивация}
+\includegraphics[scale=0.5]{mot1.png}
+\end{frame}
+
+\begin{frame}{Мотивация}
+\includegraphics[scale=0.5]{mot1.png}\newline
+\includegraphics[scale=0.5]{mot2.png}
+\end{frame}
+
+\begin{frame}{Мотивация}
+\includegraphics[scale=0.5]{mot1.png}\newline
+\includegraphics[scale=0.5]{mot2.png}\newline
+\includegraphics[scale=0.5]{mot3.png}
+\end{frame}
+
+\begin{frame}{Определения}
+\includegraphics[scale=0.5]{lambda.png}\newline
+\end{frame}
+
+\begin{frame}{Определения}
+\includegraphics[scale=0.5]{lambda.png}\newline
+\includegraphics[scale=0.5]{vector.png}\newline
+\end{frame}
+
+\begin{frame}{Определения}
+\includegraphics[scale=0.5]{lambda.png}\newline
+\includegraphics[scale=0.5]{vector.png}\newline
+\includegraphics[scale=0.5]{or1.png}\newline
+\includegraphics[scale=0.5]{or2.png}\newline
+\end{frame}
+
+\begin{frame}{Определения}
+\includegraphics[scale=0.5]{lambda.png}\newline
+\includegraphics[scale=0.5]{vector.png}\newline
+\includegraphics[scale=0.5]{or1.png}\newline
+\includegraphics[scale=0.5]{or2.png}\newline
+\includegraphics[scale=0.5]{unsigned.png}\newline
+\end{frame}
+
+\begin{frame}{Определения}
+\includegraphics[scale=0.5]{lambda.png}\newline
+\includegraphics[scale=0.5]{vector.png}\newline
+\includegraphics[scale=0.5]{or1.png}\newline
+\includegraphics[scale=0.5]{or2.png}\newline
+\includegraphics[scale=0.5]{unsigned.png}\newline
+\includegraphics[scale=0.5]{signed.png}\newline
+\end{frame}
+
+\begin{frame}{Определения}
+\includegraphics[scale=0.5]{sum.png}\newline
+\includegraphics[scale=0.5]{unary.png}\newline
+\end{frame}
+
+\begin{frame}{Определения}
+\includegraphics[scale=0.5]{rel.png}\newline
+\end{frame}
+
+\begin{frame}{Определения}
+\includegraphics[scale=0.5]{mul.png}\newline
+\end{frame}
+
+\begin{frame}{Определения}
+\includegraphics[scale=0.5]{ext.png}\newline
+\end{frame}
+
+\begin{frame}{Определения}
+\includegraphics[scale=0.5]{sh0.png}\newline
+\includegraphics[scale=0.5]{sh1.png}\newline
+\includegraphics[scale=0.5]{sh2.png}\newline
+\end{frame}
+
+\begin{frame}{Алгоритм}
+\includegraphics[scale=0.5]{algo.png}\newline
+\end{frame}
+
+\begin{frame}{Замены}
+\includegraphics[scale=0.5]{skel.png}\newline
+\includegraphics[scale=0.5]{or3.png}\newline
+\end{frame}
+
+\begin{frame}{Замены}
+\includegraphics[scale=0.5]{skel.png}\newline
+\end{frame}
+
+\begin{frame}{Замены}
+\includegraphics[scale=0.5]{sum1.png}\newline
+\includegraphics[scale=0.5]{sum2.png}\newline
+\includegraphics[scale=0.5]{sum3.png}\newline
+\includegraphics[scale=0.5]{sum4.png}\newline
+\end{frame}
+
+\begin{frame}{Замены}
+\includegraphics[scale=0.5]{rel1.png}\newline
+\includegraphics[scale=0.5]{rel2.png}\newline
+\includegraphics[scale=0.5]{rel3.png}\newline
+\end{frame}
+
+\begin{frame}{Замены}
+\includegraphics[scale=0.5]{ls.png}\newline
+\end{frame}
+
+\begin{frame}{Замены}
+\includegraphics[scale=0.5]{mul1.png}\newline
+\includegraphics[scale=0.5]{div.png}\newline
 \end{frame}
 
 \begin{frame}

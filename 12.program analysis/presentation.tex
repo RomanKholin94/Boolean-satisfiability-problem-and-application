@@ -26,13 +26,28 @@
 \title{Задачи разрешимости логических формул и приложения\newline Лекция 12. Анализ программ}
 \author{Роман Холин}
 \institute{Московский государственный университет}
-\date{Москва, 2021}
+\date{Москва, 2022}
 
 \begin{frame}
 \includegraphics[scale=0.5]{../decision-procedure.png}
 \end{frame}
 
 \frame{\titlepage}
+
+\begin{frame}{Зачем}
+\begin{itemize}
+\item automatic test generation
+\item detection of dead code
+\item verification of properties given in the form of assertions
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Анализ ограниченных программ}
+\begin{itemize}
+\item Путь исполнения программы - последовательность команд, выполненных во время запуска программы
+\item Трасса исполнения программы - последовательность состояний команд вдоль пути исполнения программы
+\end{itemize}
+\end{frame}
 
 \begin{frame}{Пример}
 \includegraphics[scale=0.5]{example1.png}
@@ -97,6 +112,14 @@ $\{i_1 := 0, N_0 := 0\}$
 
 \begin{frame}{Добавление assert-ов}
 \includegraphics[scale=0.5]{asserts.png}
+\end{frame}
+
+\begin{frame}{Инварианты цикла}
+\includegraphics[scale=0.45]{li1.png}
+\end{frame}
+
+\begin{frame}{Инварианты цикла}
+\includegraphics[scale=0.45]{li2.png}
 \end{frame}
 
 \begin{frame}

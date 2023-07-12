@@ -24,16 +24,25 @@
 
 \begin{document}
 
-\title{Задачи разрешимости логических формул и приложения\newline Лекция 9. Логика массивов}
+\title{Задачи разрешимости логических формул и приложения\newline Лекция 7. Логика массивов}
 \author{Роман Холин}
 \institute{Московский государственный университет}
-\date{Москва, 2021}
+\date{Москва, 2022}
 
 \begin{frame}
 \includegraphics[scale=0.5]{../decision-procedure.png}
 \end{frame}
 
 \frame{\titlepage}
+
+\begin{frame}{Пример}
+\includegraphics[scale=0.5]{code.png}
+\end{frame}
+
+\begin{frame}{Пример}
+\includegraphics[scale=0.5]{code.png}
+\includegraphics[scale=0.5]{conditions.png}
+\end{frame}
 
 \begin{frame}{$a\{i\leftarrow x\}$}
 $a\{i\leftarrow x\}$ - присвоить $x$ элементу массива с индексом $i$\newline
@@ -45,32 +54,32 @@ $(\forall x \in \mathbb{N}_0. x < i \implies a[x] = 0) \wedge a' = a\{i\leftarro
 $(\forall x \in \mathbb{N}_0. x \le i \implies a'[x] = 0)$
 \end{frame}
 
-\begin{frame}{Обозначения}
+\begin{frame}{Синтаксис}
 $T_I$ - тип индекса\newline
 $T_E$ - тип элемента\newline
 $T_A$ - тип массива, сокращение от $T_I \rightarrow T_E$ - т.е. множество функций из индексы в элементы\newline
 \end{frame}
 
-\begin{frame}{Обозначения}
+\begin{frame}{Синтаксис}
 $T_I$ - тип индекса\newline
 $T_E$ - тип элемента\newline
 $T_A$ - тип массива, сокращение от $T_I \rightarrow T_E$ - т.е. множество функций из индексы в элементы\newline
 Теория массивов параметризирована теориями индексов и элементов.
 \end{frame}
 
-\begin{frame}{Обозначения}
+\begin{frame}{Синтаксис}
 term A : array-identifier | term$_A\{$term$_I \leftarrow$ term$_E\}$\newline
-term E : term$_A[$term$_I]$ | (previous rules)\newline
-formula : term$_A$ = term$_A$ | (previous rules)\newline
+term E : term$_A[$term$_I]$ | \dots\newline
+formula : term$_A$ = term$_A$ | \dots\newline
 \end{frame}
 
-\begin{frame}{Аксиомы}
+\begin{frame}{Семантика}
 Аксиома чтения:
 $\forall a_1 \in T_A. \forall a_2 \in T_A. \forall i \in T_I. \forall j \in T_I. (a_1 = a_2 \wedge i = j) \implies$\newline
 $a_1[i] = a_2[j]$\newline
 Аксиома записи:
 $\forall a \in T_A. \forall e \in T_E. \forall i \in T_I. \forall j \in T_I. a\{i\leftarrow e\}[j] = (i = j)? e : a[j]$\newline
-Экзистенциальная аксиома:\newline
+Экстенсиональное аксиома :\newline
 $\forall a_1 \in T_A. \forall a_2 \in T_A. (\forall i \in T_I. a_1[i] = a_2 [i]) \implies$\newline
 $a_1 = a_2$
 \end{frame}
@@ -112,6 +121,10 @@ $(a[0] = 10 \wedge a'[1] = 20 \wedge (\forall j \ne 1. a'[j] = a[j])) \implies a
 
 \begin{frame}{Свойство массива}
 $\forall i_1 \dots \forall i_k \in T_I. \phi_I(i_1, \dots, i_k) \implies \phi_V(i_1, \dots, i_k)$\newline
+\end{frame}
+
+\begin{frame}{Свойство массива}
+$\forall i_1 \dots \forall i_k \in T_I. \phi_I(i_1, \dots, i_k) \implies \phi_V(i_1, \dots, i_k)$\newline
 1) Грамматика для $\phi_I$:\newline
 iguard : iguard $\wedge$ iguard | iguard $\vee$ iguard | iterm $\le$ iterm | iterm $=$ iterm\newline
 iterm : $i_1$ | $\dots$ | $i_k$ | term\newline
@@ -143,10 +156,7 @@ $\iota(\phi)$ - множество элементов, которые могут
 \end{frame}
 
 \begin{frame}{Редукция массивов}
-1) Применим правило записи в $\phi_A$, чтобы удалить везде запись в исходной формуле\newline
-2) Заменить везде квантор существования вида $\exists i \in T_I. P(i)$ на $P(j)$, где $j$ - новая переменная\newline
-3) Заменить везде квантор всеобщности вида $\forall i \in T_I. P(i)$ на $\bigwedge_{i \in \iota(\phi)}P(i)$\newline
-4) Заменить везде чтение из массива на неинтерпритируемые функции
+\includegraphics[scale=0.5]{array-reduction.png}
 \end{frame}
 
 \begin{frame}{Пример}

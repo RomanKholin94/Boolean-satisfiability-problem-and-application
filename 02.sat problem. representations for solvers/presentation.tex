@@ -50,6 +50,30 @@
 \end{itemize}
 \end{frame}
 
+\begin{frame}{Преобразование булевой формулы в КНФ}
+\begin{itemize}
+\item Какова сложность преобразование формулы в КНФ?
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Преобразование булевой формулы в КНФ}
+\begin{itemize}
+\item Какова сложность преобразование формулы в КНФ?
+\item В худшем случае экспонента
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Преобразование булевой формулы в КНФ}
+\begin{itemize}
+\item Какова сложность преобразование формулы в КНФ?
+\item В худшем случае экспонента
+\item Например $(x_1 \wedge y_1) \vee \dots \vee (x_n \wedge y_n)$, преобразовывая с помощью законов Де Моргана и закона
+дистрибутивности к формуле $(x_1 \vee \dots \vee x_n) \wedge (y_1 \vee x_2 \vee \dots \vee x_n) \wedge (y_1 \vee \dots \vee y_n)$
+- получаем $2^n$ дизъюнктов.
+\end{itemize}
+\end{frame}
+
+
 \begin{frame}{AtLeastOne}
 \begin{itemize}
 \item Рассмотрим функцию $AtLeastOne(x_1, \dots, x_n)$ - истина ли хотя бы одна из переменных
@@ -207,29 +231,6 @@ $\phi_2 = (\lnot x_1 \vee y) \wedge (y \lnot x_2)$\newline
 \item Выполнима ли $\lnot \phi_1 \wedge \phi_2$?
 \item Выполнима ли $\phi_1 \wedge \lnot \phi_2$?
 \item Формулы не эквивалентны, но равносильны, т.е. $\phi_1$ - выполнима, тогда и только тогда, когда $\phi_2$ - выполнима.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Преобразование булевой формулы в КНФ}
-\begin{itemize}
-\item Какова сложность преобразование формулы в КНФ?
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Преобразование булевой формулы в КНФ}
-\begin{itemize}
-\item Какова сложность преобразование формулы в КНФ?
-\item В худшем случае экспонента
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Преобразование булевой формулы в КНФ}
-\begin{itemize}
-\item Какова сложность преобразование формулы в КНФ?
-\item В худшем случае экспонента
-\item Например $(x_1 \wedge y_1) \vee \dots \vee (x_n \wedge y_n)$, преобразовывая с помощью законов Де Моргана и закона
-дистрибутивности к формуле $(x_1 \vee \dots \vee x_n) \wedge (y_1 \vee x_2 \vee \dots \vee x_n) \wedge (y_1 \vee \dots \vee y_n)$
-- получаем $2^n$ дизъюнктов.
 \end{itemize}
 \end{frame}
 

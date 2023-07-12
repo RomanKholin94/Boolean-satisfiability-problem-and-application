@@ -23,10 +23,10 @@
 }
 \begin{document}
 
-\title{Задачи разрешимости логических формул и приложения\newline Лекция 10. Комбинирование логик}
+\title{Задачи разрешимости логических формул и приложения\newline Лекция 9. Комбинирование логик}
 \author{Роман Холин}
 \institute{Московский государственный университет}
-\date{Москва, 2021}
+\date{Москва, 2022}
 
 \begin{frame}
 \includegraphics[scale=0.5]{../decision-procedure.png}
@@ -75,6 +75,15 @@ $(\phi \implies \vee_{i=1}^{n}(x_i=y_i))$ - T тавтология для нек
 $(\phi \implies (x_i=y_i))$ для всех $i \in \{1, \dots, n\}$
 \end{frame}
 
+\begin{frame}{Примеры}
+\includegraphics[scale=0.5]{convex.png}\newline
+\end{frame}
+
+\begin{frame}{Примеры}
+\includegraphics[scale=0.5]{convex.png}\newline
+\includegraphics[scale=0.5]{not_convex.png}\newline
+\end{frame}
+
 \begin{frame}{Ограничения Нельсона-Оппена}
 \begin{enumerate}
 \item $T_1, \dots T_n$ - безкванторные теории с равенством
@@ -101,6 +110,10 @@ $(\phi \implies (x_i=y_i))$ для всех $i \in \{1, \dots, n\}$
 \end{enumerate}
 \end{frame}
 
+\begin{frame}{Пример}
+\includegraphics[scale=0.5]{ex1.png}\newline
+\end{frame}
+
 \begin{frame}{Алгоритм Нельсона-Оппена для выпуклых теорий}
 \begin{enumerate}
 \item Очистить формулу $\phi$ и получить $F_1, \dots, F_n$
@@ -113,6 +126,18 @@ $F_j$ такое равенство и вернутся на шаг 2
 
 \begin{frame}{Алгоритм Нельсона-Оппена для выпуклых теорий}
 Если хотя бы одна из теорий не выпуклая, то алгоритм будет ложно возвращать $SAT$
+\end{frame}
+
+\begin{frame}{Пример}
+\includegraphics[scale=0.5]{ex2.png}\newline
+\end{frame}
+
+\begin{frame}{Пример}
+\includegraphics[scale=0.5]{ex3.png}\newline
+\end{frame}
+
+\begin{frame}{Пример}
+\includegraphics[scale=0.5]{ex4.png}\newline
 \end{frame}
 
 \begin{frame}{Алгоритм Нельсона-Оппена}
@@ -130,6 +155,10 @@ $F_j$ такое равенство и вернутся на шаг 2
 Если хотя бы одино из выражений выполимо, то возращаем SAT. Иначе UNSAT.
 \item Вернуть SAT
 \end{enumerate}
+\end{frame}
+
+\begin{frame}{Пример}
+\includegraphics[scale=0.5]{ex4.png}\newline
 \end{frame}
 
 \begin{frame}

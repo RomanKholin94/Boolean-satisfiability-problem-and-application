@@ -24,11 +24,10 @@
 
 \begin{document}
 
-\title{Задачи разрешимости логических формул и приложения\newline Лекция 7. Алгоритм Davis–Putnam–Logemann–Loveland(Theory).
-Логики равенства и неинтерпритируемых функций}
+\title{Задачи разрешимости логических формул и приложения\newline Лекция 5. Логики равенства и неинтерпритируемых функций}
 \author{Роман Холин}
 \institute{Московский государственный университет}
-\date{Москва, 2021}
+\date{Москва, 2022}
 
 \begin{frame}
 \includegraphics[scale=0.5]{../decision-procedure.png}
@@ -36,149 +35,7 @@
 
 \frame{\titlepage}
 
-\begin{frame}{Ещё небольшая оптимизация CDCL}
-\begin{itemize}
-\item Во многих системах SAT решатель - лишь часть этой системы
-\item Запросы к решателю могут быть похожи
-\item Например, пусть есть робот, который нахоидтся на клеточном поле, которое является лабиринтом. Может ли робот выйти из него
-за $k$ шагов?
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Ещё небольшая оптимизация CDCL}
-\begin{itemize}
-\item Во многих системах SAT решатель - лишь часть этой системы
-\item Запросы к решателю могут быть похожи
-\item Например, пусть есть робот, который нахоидтся на клеточном поле, которое является лабиринтом. Может ли робот выйти из него
-за $k$ шагов?
-\end{itemize}
-Информацию можно использовать следующим образом:
-\begin{itemize}
-\item Использовать дизъюнкты
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}{Ещё небольшая оптимизация CDCL}
-\begin{itemize}
-\item Во многих системах SAT решатель - лишь часть этой системы
-\item Запросы к решателю могут быть похожи
-\item Например, пусть есть робот, который нахоидтся на клеточном поле, которое является лабиринтом. Может ли робот выйти из него
-за $k$ шагов?
-\end{itemize}
-Информацию можно использовать следующим образом:
-\begin{itemize}
-\item Использовать дизъюнкты
-\item Использовать эвристические параметры
-\end{itemize}
-\end{frame}
-
-\begin{frame}{CDCL}
-\begin{algorithmic}
-\Function {CDCL}{}
-    \While {true}
-        \While {BCP() = "conflict"}
-            \State backtrack-level := Analyze-Conflict()
-            \If {backtrack-level < 0}
-                \State return "Unsatisfiable"
-            \EndIf
-            \State BackTrack(backtrack-level)
-            \If {$\lnot$ Decide()}
-                \State return "Satisfiable"
-            \EndIf
-        \EndWhile
-    \EndWhile
-\EndFunction
-\end{algorithmic}
-\end{frame}
-
-\begin{frame}{Lazy}
-\begin{algorithmic}
-\Function{Lazy}{$\phi$}
-    \State $B := e(\phi)$
-    \While {true}
-        \State $<\alpha, res> := SAT-Solver(B)$
-        \If {res = <<Unsatisfiable>>}
-            \State return <<Unsatisfiable>>;
-        \Else
-            \State $<t, res> := Deduction(\overline{Th(\alpha)})$
-            \If {res = <<Satisfiable>>}
-                \State return <<Satisfiable>>
-            \EndIf
-            \State $B := B \wedge e(t)$;
-        \EndIf
-    \EndWhile
-\EndFunction
-\end{algorithmic}
-\end{frame}
-
-\begin{frame}
-\includegraphics[scale=0.45]{pineapple}
-\end{frame}
-
-\begin{frame}
-\begin{itemize}
-\item Пусть $B_i$ - формула, которая получилась Lazy на $i$-ом шаге
-\item По построению, $B_i$ - подформула $B_{i+1}$
-\item Давайте не будем заново вызывать SAT решатель, а просто встроем в SAT решатель вызов решателя теории (и после вызова
-решателя теорий будем добавлять блокирующий дизъюнкт)
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Lazy-CDCL}
-\begin{algorithmic}
-\State AddClauses(cnf(e($\phi$)))
-\While {true}
-    \While {BCP() = <<conflict>>}
-        \State backtrack-level := Analyze-Conflict()
-        \If {backtrack-level < 0}
-            \State return <<Unsatisfiable>>
-        \Else
-            \State BackTrack(backtrack-level)
-        \EndIf
-        \If {$\lnot$ Decide()}
-            \State $<t, res> := Deduction(\overline{Th(\alpha)})$
-            \If {res = <<Satisfiable>>}
-                \State return <<Satisfiable>>
-            \EndIf
-            \State AddClauses(e(t))
-        \EndIf
-    \EndWhile
-\EndWhile
-\end{algorithmic}
-\end{frame}
-
-\begin{frame}
-\begin{itemize}
-\item Что, если уже при данной частичной оценке формула в теории $T$ уже не выполнима?
-\item Давайте всегда вызывать Deduction и добавлять к формуле невыолнимое ядро формулы
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Lazy-CDCL}
-\begin{algorithmic}
-\State AddClauses(cnf(e($\phi$)))
-\While {true}
-    \Repeat
-        \While {BCP() = <<conflict>>}
-            \State backtrack-level := Analyze-Conflict()
-            \If {backtrack-level < 0}
-                \State return <<Unsatisfiable>>
-            \Else
-                \State BackTrack(backtrack-level)
-            \EndIf
-            \State $<t, res> := Deduction(\overline{Th(\alpha)})$; AddClauses(e(t))
-        \EndWhile
-    \Until{t = true}
-    \If {$\alpha$ is a full assignment}
-        \State return <<Satisfiable>>
-    \EndIf
-    \State Decide()
-\EndWhile
-\end{algorithmic}
-\end{frame}
-
-\begin{frame}{Логика равенства}
+\begin{frame}{Логика равенства (EQ)}
 $formula: formula \vee formula | \lnot formula | (formula) | atom$\newline
 $atom: term = term$\newline
 $term: identifier | constant$\newline
@@ -188,7 +45,15 @@ $term: identifier | constant$\newline
 $formula: formula \vee formula | \lnot formula | (formula) | atom$\newline
 $atom: term = term$\newline
 $term: identifier | constant$\newline
-Задача разрешимости формулы логики равенства - NP-полная\newline
+Какова сложность задачи разрешимости формулы логики равенства?\newline
+\end{frame}
+
+\begin{frame}{Логика равенства (EQ)}
+$formula: formula \vee formula | \lnot formula | (formula) | atom$\newline
+$atom: term = term$\newline
+$term: identifier | constant$\newline
+Какова сложность задачи разрешимости формулы логики равенства?\newline
+Зачем изучать и пропозиционную логику и логику равенства?\newline
 \end{frame}
 
 \begin{frame}{Удаление констант}
@@ -205,16 +70,22 @@ $\phi' = \phi$\newline
 \end{frame}
 
 \begin{frame}{Логика неинтерпретируемых функций (UF)}
-$formula: formula \vee formula | \lnot formula | (formula) | atom$\newline
-$atom: term = term| predicateSymbol(list of terms)$\newline
-$term: identifier | functionSymbol(list of terms)$\newline
+$F(x) = F (G(y)) \vee x + 1 = y$\newline
 \end{frame}
 
 \begin{frame}{Логика неинтерпретируемых функций (UF)}
+$F(x) = F (G(y)) \vee x + 1 = y$\newline
 $formula: formula \vee formula | \lnot formula | (formula) | atom$\newline
-$atom: term = term| predicateSymbol(list of terms)$\newline
-$term: identifier | functionSymbol(list of terms)$\newline
-Если predicateSymbol состоит только из \{=\}, то логику называют EUF
+$atom: term = term| predicate\_symbol(list\_of\_terms)$\newline
+$term: identifier | function\_symbol(list\_of\_terms)$\newline
+\end{frame}
+
+\begin{frame}{Логика неинтерпретируемых функций (UF)}
+$F(x) = F (G(y)) \vee x + 1 = y$\newline
+$formula: formula \vee formula | \lnot formula | (formula) | atom$\newline
+$atom: term = term| predicate\_symbol(list\_of\_terms)$\newline
+$term: identifier | function\_symbol(list\_of\_terms)$\newline
+Если predicate\_symbol состоит только из \{=\}, то логику называют EUF
 \end{frame}
 
 \begin{frame}{Логика неинтерпретируемых функций(UF)}
@@ -228,28 +99,23 @@ $term: identifier | functionSymbol(list of terms)$\newline
 
 \begin{frame}{Логика неинтерпретируемых функций(UF)}
 Как используется?\newline
-Если можем доказать в EUF, то можем доказать и в частной логике\newline
+Если можем доказать в этой логике, то можем доказать и в общей фомруле\newline
+Главное, чтобы выполнялось условие функциональной совместимости: значение функции на одних и тех же аргументах одинаково
+\end{frame}
+
+\begin{frame}{Логика неинтерпретируемых функций(UF)}
+Как используется?\newline
+Если можем доказать в этой логике, то можем доказать и в общей фомруле\newline
+Главное, чтобы выполнялось условие функциональной совместимости: значение функции на одних и тех же аргументах одинаково\newline
 Обратное не верно: если формула не тавтология в EUF, то не факт, что это не тавтология в EUF
 \end{frame}
 
 \begin{frame}{Эквивалентность программ}
-Программа a:\newline
-int i, out\_a = in;\newline
-for (int i = 0; i < 2; ++i) out\_a = out\_a * in;\newline
-return out\_a;\newline
-Программа b:\newline
-int out\_b = (in * in) * in;\newline
-return out\_b;\newline
+\includegraphics[scale=0.5]{power3.png}
 \end{frame}
 
 \begin{frame}{Эквивалентность программ}
-Программа a:\newline
-int i, out\_a = in;\newline
-for (int i = 0; i < 2; ++i) out\_a = out\_a * in;\newline
-return out\_a;\newline
-Программа b:\newline
-int out\_b = (in * in) * in;\newline
-return out\_b;\newline
+\includegraphics[scale=0.5]{power3.png}
 $\phi_a := (out\_a_0 = in\_a_0) \wedge (out\_a_1 = out\_a_0 * in\_a_0) \wedge (out\_a_2 = out\_a_1 * in\_a_0)$\newline
 $\phi_b := out\_b_0 = (in\_b_0 * in\_b_0) * in\_b_0$\newline
 Чтобы программы были эквивалентны, должно выполняться:\newline
@@ -257,29 +123,26 @@ $(in\_a_0 = in\_b_0) \wedge \phi_a \wedge \phi_b \rightarrow out\_a_2 = out\_b_0
 \end{frame}
 
 \begin{frame}{Эквивалентность программ}
-Программа a:\newline
-int i, out\_a = in;\newline
-for (int i = 0; i < 2; ++i) out\_a = out\_a * in;\newline
-return out\_a;\newline
-Программа b:\newline
-int out\_b = (in * in) * in;\newline
-return out\_b;\newline
+\includegraphics[scale=0.5]{power3.png}
 Перепишем формулу в EUF. Будем считать, что * - это некоторый двуместный функциональный символ G(,)
 \end{frame}
 
 \begin{frame}{Эквивалентность программ}
-Программа a:\newline
-int i, out\_a = in;\newline
-for (int i = 0; i < 2; ++i) out\_a = out\_a * in;\newline
-return out\_a;\newline
-Программа b:\newline
-int out\_b = (in * in) * in;\newline
-return out\_b;\newline
+\includegraphics[scale=0.5]{power3.png}
 Перепишем формулу в EUF. Будем считать, что * - это некоторый двуместный функциональный символ G(,)
 $\phi_a := (out\_a_0 = in\_a_0) \wedge (out\_a_1 = G(out\_a_0, in\_a_0)) \wedge (out\_a_2 = G(out\_a_1, in\_a_0)$\newline
 $\phi_b := out\_b_0 = G(G(in\_b_0, in\_b_0), in\_b_0)$\newline
 Чтобы программы были эквивалентны, должно выполняться:\newline
 $(in\_a_0 = in\_b_0) \wedge \phi_a \wedge \phi_b \rightarrow out\_a_2 = out\_b_0$, но теперь нам не нужно знать природу G
+\end{frame}
+
+\begin{frame}{Эквивалентность программ}
+\includegraphics[scale=0.5]{mul3.png}
+\end{frame}
+
+\begin{frame}{Эквивалентность программ}
+\includegraphics[scale=0.5]{mul3.png}
+\includegraphics[scale=0.5]{mul3_ans.png}
 \end{frame}
 
 \begin{frame}{Замыкание классов эквивалентности}
@@ -292,6 +155,32 @@ $(in\_a_0 = in\_b_0) \wedge \phi_a \wedge \phi_b \rightarrow out\_a_2 = out\_b_0
 \item Если какие-то $\phi_i$ и $\phi_j$ в одном классе эквивалентности и есть неравенство $\phi_i \neq \phi_j$, то вернуть результат
 <<Unsatisfiable>>. Иначе вернуть <<Satisfiable>>
 \end{itemize}
+\end{frame}
+
+\begin{frame}{Пример}
+$(x_1 = x_2) \wedge (x_2 = x_3) \wedge (x_4 = x_5) \wedge (x_5 \neq x_1) \wedge (F(x_1) \neq F(x_3))$
+\end{frame}
+
+\begin{frame}{Недостаточность функциональной совместимости}
+$(x_1 = y_2) \wedge (x_2 = y_1) \rightarrow (x_1 + y_1) = (x_2 + y_2)$
+\end{frame}
+
+\begin{frame}{Алгоритм уточнения}
+\begin{enumerate}
+\item $\phi' = t(\phi)$ (t - абстрагирование исходной формулы)
+\item если $\phi'$ - тавтология, то исходная так же тавология
+\item если $\phi' = \phi$, то не тавтология
+\item добавить "уточнение" и вернуться на шаг 2
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Пример}
+\includegraphics[scale=0.5]{circuit.png}
+\end{frame}
+
+\begin{frame}{Пример}
+$z = (x_1 + y_1) * (x_2 + y_2)$\newline
+$u_1 = x_1 + y_1; u_2 = x_2 + y_2; z = u_1 * u_2$
 \end{frame}
 
 \begin{frame}
