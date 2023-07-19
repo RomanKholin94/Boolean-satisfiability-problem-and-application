@@ -1,4 +1,4 @@
-\documentclass{beamer}
+\documentclass[mathserif]{beamer}
 \usepackage[english,russian]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
@@ -22,10 +22,10 @@
 
 \begin{document}
 
-\title{Задачи разрешимости логических формул и приложения\newline Лекция 1. Введение}
-\author{Роман Холин}
-\institute{Московский государственный университет}
-\date{Москва, 2021}
+\title{SAT/SMT solvers\newline  1. Introduction}
+\author{Roman Kholin}
+\institute{Lalambda}
+\date{Tbilisi, 2023}
 
 \begin{frame}
 \includegraphics[scale=0.5]{../decision-procedure.png}
@@ -33,222 +33,247 @@
 
 \frame{\titlepage}
 
-\begin{frame}{О чём курс}
+\begin{frame}{Outline}
 \begin{itemize}
-\item Что такое решатели (solvers)
-\item Что такое SAT и SMT решатели и чем они отличаются
-\item Как ими пользоваться
-\item Как они устроены
-\item Где они используются
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Где применяется?}
-\begin{itemize}
-\item Формальная верификация
-\item Поиск ошибок
-\item Безопасность
-\item Биоинформатика
-\item Планирование расписаний
-\item Автоматическое доказательство теорем
-\item Генерация эксплоитов
+\item What are SAT and SMT
+\item How they are made
+\item Where to use they
 \end{itemize}
 \end{frame}
 
 \begin{frame}
-Edmund Clarke: <<a key technology of the 21st century>>\newline
-Donald Knuth: <<evidently a killer app, because it is key to the solution of so mane other problems>>\newline
+Edmund Clarke:
+\begin{block}{}
+A key technology of the 21st century
+\end{block}
+Donald Knuth
+\begin{block}{}
+Evidently a killer app, because it is key to the solution of so mane other problems
+\end{block}
 \end{frame}
 
-\begin{frame}{Определения}
-Пусть дано множество переменных $V$, скобки и логические связки $\vee$, $\wedge$, $\rightarrow$, $\lnot$. Определим булеву
-формулу по индукции:
+\begin{frame}{Examples}
+You are the chief of protocol and you make a diner for an ambassadors. The prince wants to invite either an ambassador from Peru or not to invite ambassador from Qatar. The queen wants to see the ambassadors of Qatar or Romania. The king does not want to see ambassadors from Romania or Peru. Whom to invite for dinner?
+\end{frame}
+
+\begin{frame}{Examples}
 \begin{itemize}
-\item все переменные из $V$ - формулы.
-\item если $A$ - формула, то $\lnot(A)$ - формула
-\item если $A$, $B$ - формулы, то $(A)\vee(B)$, $(A)\wedge(B)$, $(A)\rightarrow(B)$ - также формулы.
+\item The set of natural numbers was divided into subsets. Does any contain Pythagorean triple?
+\item Let's the number of subsets is three and original set is $\{1, \dots, N\}$. The minimal $N$ such that it can't be diveded is 7825
+\item There is no answer for number of subsets 3. It's could be shown that $\{1, \dots, 10^7\}$ could be diveded
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Определения}
+\begin{frame}{Examples}
+\includegraphics[scale=0.5]{equivalent1.png}
+\end{frame}
+
+\begin{frame}{Examples}
+\includegraphics[scale=0.5]{equivalent1.png}
+\includegraphics[scale=0.5]{equivalent2.png}
+\end{frame}
+
+\begin{frame}{Examples}
+\includegraphics[scale=0.5]{equivalent1.png}
+\includegraphics[scale=0.5]{equivalent2.png}
+\includegraphics[scale=0.5]{equivalent3.png}
+\end{frame}
+
+\begin{frame}{Examples}
+\includegraphics[scale=0.5]{equivalent1.png}
+\includegraphics[scale=0.5]{equivalent2.png}
+\includegraphics[scale=0.5]{equivalent3.png}
+\includegraphics[scale=0.5]{equivalent4.png}
+\end{frame}
+
+\begin{frame}{Definitions}
+\begin{block}{Propositional formula}
+Given a set $V$, brackets, $\vee$, $\wedge$, $\rightarrow$, $\lnot$, let define an formulas as:
 \begin{itemize}
-\item Если $v \in V$, то $v$ и $\lnot v$ называют литералами.
-\item Оценка формулы - присвоение каждой переменной значения <<истина>> или <<ложь>> и последующее вычисление значения формулы. Значение
-формулы вычисляется по индукции.
+\item all variables $V$ are formula.
+\item if $A$ is formula, then $\lnot(A)$ - fromula
+\item if $A$, $B$ are formulas, then $(A)\vee(B)$, $(A)\wedge(B)$, $(A)\rightarrow(B)$ is formula.
+\end{itemize}
+\end{block}
+\begin{block}{Assignment}
+Given a formula $\varphi$, an $assignment$ of $\varphi$ from a domain $D$ is a function mapping $\varphi$ 's variables to elements of $D$. An assignment to $\varphi$ is full if all of $\varphi$ 's variables are assigned, and partial otherwise.
+\end{block}
+\end{frame}
+
+\begin{frame}{Definitions}
+\begin{block}{Satisfiability, Validity, and Contradiction}
+\begin{itemize}
+\item A formula is $satisfiable$ if there exists an assignment of its variables under which the formula evaluates to true.
+\item A formula is a $contradiction$ if it is not $satisfiable$.
+\item A formula is $valid$ (also called a $tautology$) if it evaluates to true under all assignments.
+\end{itemize}
+\end{block}
+\begin{block}{The decision problem for formulas}
+The decision problem for a given formula $\varphi$ is to determine whether $\varphi$ is valid.
+\end{block}
+\begin{block}{Soundness of a procedure}
+A procedure for a decision problem is sound if, when it returns $Valid$, the input formula is $valid$.
+\end{block}
+\end{frame}
+
+\begin{frame}{Definitions}
+\begin{block}{Completeness of a procedure}
+A procedure for a decision problem is $complete$ if
+\begin{itemize}
+\item it always terminates, and
+\item it returns $Valid$ when the input formula is valid
+\end{itemize}
+\end{block}
+\begin{block}{Decision procedure}
+A procedure is called a decision procedure for $T$ if it is sound and complete with respect to every formula of $T$
+\end{block}
+\begin{block}{Decidability of a theory}
+A theory is decidable if and only if there is a decision procedure for it
+\end{block}
+\end{frame}
+
+\begin{frame}{Definitions}
+\begin{block}{Negation Normal Form (NNF)}
+A formula is in negation normal form (NNF) if negation is allowed only over variables, and $\vee$, $\wedge$, $\lnot$ are the only allowed Boolean connectives
+\end{block}
+\begin{block}{Literal}
+A $literal$ is either an variable or its negation. We say that a literal is negative if it is a negated variable, and positive otherwise
+\end{block}
+\begin{block}{State of a literal under an assignment}
+A positive literal is satisfied if its variable is assigned TRUE. Similarly, a negative literal is satisfied if its variable is assigned FALSE
+\end{block}
+\end{frame}
+
+\begin{frame}{Definitions}
+\begin{block}{Monotonicity of NNF}
+Let $\varphi$ be a formula in NNF and let $\alpha$ be an assignment of its variables.
+Let the positive set of $\alpha$ with respect to $\varphi$, denoted $pos(\alpha, \varphi)$, be the literals that are satisfied by $\alpha$.
+For every assignment $\alpha'$ to $\varphi$'s variables such that $pos(\alpha, \varphi) \subseteq pos(\alpha', \varphi), \alpha \models \varphi \rightarrow \alpha' \models \varphi$
+\end{block}
+\includegraphics[scale=0.5]{monotonicity.png}
+\end{frame}
+
+\begin{frame}{Definitions}
+\begin{block}{Disjunctive Normal Form (DNF)}
+A formula is in disjunctive normal form if it is a disjunction of conjunctions of literals, i.e., a formula of the form $\bigvee\limits_{i}\bigwedge\limits_{j}l_{ij}$, where $l_{ij}$ is the $j$-th literal in the $i$-th term (a term is a conjunction of literals)
+\end{block}
+\begin{block}{Conjunctive Normal Form (CNF)}
+A formula is in conjunctive normal form if it is a conjunction of disjunctions of literals, i.e., it has the form $\bigwedge\limits_{i}\bigvee\limits{j}l_{ij}$, where $l_{ij}$ is the $j$-th literal in the $i$-th clause (a clause is a disjunction of literals)
+\end{block}
+\end{frame}
+
+\begin{frame}{Tseitin Transformation}
+$\phi := ((p \vee q) \wedge r) \rightarrow (\lnot s)$
+\begin{block}{Equisatisfiability}
+Two formulas are equisatisfiable if they are both satisfiable or they are both unsatisfiable
+\end{block}
+\end{frame}
+
+\begin{frame}{SAT}
+\begin{block}{}
+Given a propositional formula f over n propositional variables $V = {x_1, \dots, x_n}$, is there are an assignment $\alpha: V \rightarrow \{0, 1\}$ with $\alpha(f) = 1$?
+\end{block}
+\end{frame}
+
+\begin{frame}{SAT}
+\begin{block}{}
+Given a propositional formula f over n propositional variables $V = {x_1, \dots, x_n}$, is there are an assignment $\alpha: V \rightarrow \{0, 1\}$ with $\alpha(f) = 1$?
+\end{block}
+\begin{itemize}
+\item SAT belongs to NP (for n > 2)
+\item SAT is complete for NP
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Определения}
+\begin{frame}{Examples}
+\includegraphics[scale=0.45]{hamiltonial.png}
+\end{frame}
+
+\begin{frame}{Examples}
 \begin{itemize}
-\item Булева формула выполнима - если существует такая оценка, что значение формулы при ней <<истина>>.
-\item Формула противоречива, если не
-существует такой оценки.
-\item Формула является тавтологией, если при любой оценки она <<истина>>.
+\item $AtLeastOne(x_1, \dots, x_n)$
+\item $AtMostOne(x_1, \dots, x_n)$
+\item Lazy approach
 \end{itemize}
-\end{frame}
-
-\begin{frame}{Определения}
-\begin{itemize}
-\item Конъюктивная нормальная форма - форма записи булевой формулы, при которой эта формула имеет вид конъюкции дизъюнкций
-литералов.
-\item Дизъюнктивная нормальная форма - наоборот.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{SAT задача}
-\begin{itemize}
-\item На вход подается булева формула, содержащую только нумерованные переменные, $\vee$, $\wedge$, $\lnot$. Является ли формула выполнимой?
-\end{itemize}
-\end{frame}
-
-\begin{frame}{SAT задача}
-\begin{itemize}
-\item Если дизъюнкты в формуле имеет длину не более 2, то сложность задачи распознавания принадлежит классу $P$.
-\item Иначе, это $NP$-полная задача (теорема Кука-Левина). Более того, исторически, это первая задача, чья $NP$-полнота была доказана.
-\item Что для нас значит, что задача $NP$-полна? Это значит, что если мы каким-то образом научимся решать такую задачу <<быстро>>, то
-мы сможем <<быстро>> решать класс $NP$ задач.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Примеры}
-\begin{itemize}
-\item Вы глава протокола на ужине для иностранных послов в некотором королевстве. Принц хочет, чтобы либо был посол из Перу,
-либо не было посла Катара. Королева хочет видить послов Катара или Румынии. Король не хочет видеть послов из Румынии или Перу.
-Кого же позвать на ужин?
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Примеры}
-\begin{itemize}
-\item Вы глава протокола на ужине для иностранных послов в некотором королевстве. Принц хочет, чтобы либо был посол из Перу,
-либо не было посла Катара. Королева хочет видить послов Катара или Румынии. Король не хочет видеть послов из Румынии или Перу.
-Кого же позвать на ужин?
-\item $(\lnot p \vee q) \wedge (q \vee r) \wedge (\lnot r \vee \lnot q)$
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Примеры}
-\begin{itemize}
-\item Пусть множество натуральных чисел разбили на конечное количество непересекающихся множеств. Есть ли хотя бы одно
-множество, которое содержит тройку чисел, которая является Пифагоровой? Например, пусть натуральные числа разбили на два
-множества: множество четных и множество нечетных чисел. Тогда очевидно, что множество нечетных чисел не содержит Пифагоровой
-тройки.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Примеры}
-\begin{itemize}
-\item Давайте упростим задачу: давайте будем делить множество натуральных чисел только на две части. Тогда ответ на задачу
-положительный. Достаточно представить подмножество натуральных чисел, которое нельзя разбить на 2 части так, чтобы не в одном
-из них не было пифагоровой тройки. С помощью SAT решателя можно выяснить, что наименьшее такое $N$, что множество
-$\{1, \dots, N\}$ нельзя разбить на 2 множества, равно $7825$.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Примеры}
-\begin{itemize}
-\item А что, если мы разбиваем на три множества? Можно показать, что множество $\{1, \dots, 10^7\}$ можно разбить.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Пример}
-\begin{itemize}
-\item Зачем разобрали этот пример? Потому что решение этой задачи сродни тому, как мы решаем задачи верификации и поиска ошибок.
-После публикации <<Symbolic Model Checking without BDDs>> 1999 рост интереса людей, занимающиеся верификацией и поском ошибок к
-решателям сильно возрос.
-\item Поиск ошибок - это поиск контрпримера.
-\item Верификация - доказательство того, что контрпримера нет.
-\item Сейчас верификаторы и сканеры ошибок - основные <<потребители>> SAT и SMT решателей.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Проверка кода на эквивалентность}
-if(!a \&\& !b) h();\newline
-else if(!a) g();\newline
-else f();\newline
-\newline
-if(a) f();\newline
-else if(b) g();\newline
-else h();
-\end{frame}
-
-\begin{frame}{Проверка кода на эквивалентность}
-Представим процедуры как будевские переменные:\newline
-if $\lnot a \wedge \lnot b$ then h\newline
-else if $\lnot a$ then g\newline
-else $f$\newline
-\newline
-if $a$ then f\newline
-else if $b$ then g\newline
-else h
-\end{frame}
-
-\begin{frame}{Проверка кода на эквивалентность}
-Представим процедуры как будевские переменные:\newline
-if $\lnot a \wedge \lnot b$ then h\newline
-else if $\lnot a$ then g\newline
-else $f$\newline
-\newline
-if $a$ then f\newline
-else if $b$ then g\newline
-else h\newline
-Скомпилируем код в КНФ:\newline
-compile(if x then y else z ) $\equiv (\lnot x \vee y) \wedge (x \vee z)$
-\end{frame}
-
-\begin{frame}{Проверка кода на эквивалентность}
-Скомпилируем код в КНФ:\newline
-compile(if x then y else z ) $\equiv (\lnot x \vee y) \wedge (x \vee z)$\newline
-if $\lnot a \wedge \lnot b$ then h else if $\lnot a$ then g else f $\equiv$\newline
-$(\lnot(\lnot a \wedge \lnot b) \vee h) \wedge ((\lnot a \wedge \lnot b) \vee ($if $\lnot a$ then g else f )) $\equiv$\newline
-$(a \vee b \vee h) \wedge ((\lnot a \wedge \lnot b) \vee ((a \vee g ) \wedge (\lnot a \vee f ))$
-\end{frame}
-
-\begin{frame}{Проверка кода на эквивалентность}
-Скомпилируем код в КНФ:\newline
-compile(if x then y else z ) $\equiv (\lnot x \vee y) \wedge (x \vee z)$\newline
-if $\lnot a \wedge \lnot b$ then h else if $\lnot a$ then g else f $\equiv$\newline
-$(\lnot(\lnot a \wedge \lnot b) \vee h) \wedge ((\lnot a \wedge \lnot b) \vee ($if $\lnot a$ then g else f )) $\equiv$\newline
-$(a \vee b \vee h) \wedge ((\lnot a \wedge \lnot b) \vee ((a \vee g ) \wedge (\lnot a \vee f ))$
-\newline
-if a then f else if b then g else h $\equiv$\newline
-$(\lnot a \vee f) \wedge (a \vee$(if b then g else h)) $\equiv$\newline
-$(\lnot a \vee f) \wedge (a \vee((\lnot b \vee g) \wedge (b \vee h))$
-\end{frame}
-
-\begin{frame}{SMT решатель}
-\begin{itemize}
-\item Что, если нам хочется задавать более сложные вопросы решателю? Например, разрешима ли такая формула:
-$(x = 4) \wedge ((y = 7) \vee (x = y))$
-\item Или такая: $(x + y = 3) \wedge (y - z = 7) \wedge (z * 2 = 4)$
-\item Или такая: $(lenght(s) = 3) \wedge (s[0] = 'a') \wedge (s[1] = 'b') \wedge (s[2] = 'c')$
-\end{itemize}
-\end{frame}
-
-\begin{frame}{SMT решатель}
-Пропозиционной логики для этого не достаточно. Для описания таких систем используется логика первого порядки и теории.
-\begin{itemize}
-\item равенства
-\item равенства и неинтерпритируемых функций
-\item линейной арифметики
-\item векторы битов
-\item массивов
-\end{itemize}
-Большая часть SMT решателей использует SAT решатели.
-\end{frame}
-
-\begin{frame}{SMT-lib}
-\begin{itemize}
-\item Специальный list-подобный язык для записи уравнений, подающийся на вход решателю.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{SMT-lib}
-\includegraphics[scale=1.0]{SMT-LIB.png}
 \end{frame}
 
 \begin{frame}{}
+\begin{itemize}
+\item $(x = 4) \wedge ((y = 7) \vee (x = y))$
+\item $(x + y = 3) \wedge (y - z = 7) \wedge (z * 2 = 4)$
+\item $(lenght(s) = 3) \wedge (s[0] = 'a') \wedge (s[1] = 'b') \wedge (s[2] = 'c')$
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Definitions}
+\begin{block}{First-order logic}
+\begin{itemize}
+\item Variables: a set of variables
+\item Logical symbols: the standard Boolean connectives (e.g., $\wedge, \vee, \lnot$), quantifiers ($\exists$ and $\forall$), and parentheses
+\item Nonlogical symbols: function, predicate, and constant symbols
+\item Syntax: rules for constructing formulas. Formulas adhering to these rules are said to be well formed
+\end{itemize}
+\end{block}
+\begin{block}{}
+\begin{itemize}
+\item A domain
+\item An interpretation of the nonlogical symbols, in the form of a mapping from each function and predicate symbol to a function and a predicate, respectively, and an assignment of a domain element to each of the constant symbols
+\item An assignment of a domain element to each of the free (unquantified) variables
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Definitions}
+\begin{block}{Satisfiability}
+The formula $\varphi$ is satisfiable if and only if there exists a structure under which the formula is true.
+\end{block}
+\end{frame}
+
+\begin{frame}{Expressiveness}
+\begin{block}{}
+Theory A is more expressive than theory B if every language that can be defined by a B-formula can also be defined by an A-formula, and there exists at least one language definable by an A-formula that cannot be defined by a B-formula. We denote the fact that theory B is less expressive than theory A by B $\prec$ A.
+\end{block}
+\includegraphics[scale=0.5]{expressiveness.png}
+\end{frame}
+
+\begin{frame}{logics}
+\begin{itemize}
+\item Propositional Logic
+\item Equalities and Uninterpreted Functions
+\item Linear Arithmetic
+\item Bit Vectors
+\item Arrays
+\item Pointer Logic
+\end{itemize}
+\includegraphics[scale=0.4]{logics.png}
+\end{frame}
+
+\begin{frame}{Solvers}
 \includegraphics[scale=0.4]{SAT_results.png}
+\end{frame}
+
+\begin{frame}{Solvers}
+\includegraphics[scale=1.0]{SMT-LIB.png}
+\end{frame}
+
+\begin{frame}{DIMACS format}
+\begin{itemize}
+\item $(a \vee b \vee \lnot c) \wedge (\lnot a \vee \lnot b \vee c) \wedge (b \vee c \vee \lnot d)$
+\item c example\newline
+p cnf 4 3\newline
+1 2 -3 0\newline
+-1 -2 3 0\newline
+2 3 -4 0\newline
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Additional materials}
+\begin{itemize}
+\item Decision Procedures An Algorithmic Point of View, Daniel Kroening, Ofer Strichman
+\item Handbook of satisfiability, Edmund Clarke
+\item The art of Computer Programming, volume 4, part 6, Donald Knuth
+\end{itemize}
 \end{frame}
 
 \begin{frame}
