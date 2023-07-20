@@ -113,7 +113,7 @@ where $a_1, \dots, a_n, b_1, \dots, b_m$ are literals and $\beta$ is a variable.
 \begin{frame}{Decision Heuristics}
 \begin{itemize}
 \item Jeroslow–Wang: compute for each literal $l$\newline
-$J(l) = \Sigma_{w \in B, l \in w}2^{|w|}$
+$J(l) = \Sigma_{w \in B, l \in w}2^{-|w|}$
 \item Dynamic Largest Individual Sum (DLIS): at each decision level, choose the unassigned literal that satisfies the largest number of currently unsatisfied clauses
 \item Variable State Independent Decaying Sum (VSIDS): A new conflict clause, adds 1 to the score of each literal that appears in it. Periodically divide all scores by 2.
 \end{itemize}
