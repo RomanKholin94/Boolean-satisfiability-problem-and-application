@@ -24,10 +24,10 @@
 
 \begin{document}
 
-\title{Задачи разрешимости логических формул и приложения\newline Лекция 6. Линейная логика. Логика битовых векторов}
-\author{Роман Холин}
-\institute{Московский государственный университет}
-\date{Москва, 2022}
+\title{SAT\\SMT solvers\newline 5. Linear arithmetic and Bit vectors}
+\author{Roman Kholin}
+\institute{Lalambda}
+\date{Tbilisi, 2023}
 
 \begin{frame}
 \includegraphics[scale=0.5]{../decision-procedure.png}
@@ -35,137 +35,128 @@
 
 \frame{\titlepage}
 
-\begin{frame}{Логика линейной арифметики}
-\includegraphics[scale=0.5]{linear_syntax.png}
-\end{frame}
-
-\begin{frame}{Логика линейной арифметики}
-\includegraphics[scale=0.5]{linear_syntax.png}
+\begin{frame}{Linear arithmetic}
+\begin{block}{Syntax}
+\begin{itemize}
+\item $formula: formula \wedge formula$ | $\lnot formula$ | $(formula)$ | $atom$
+\item $atom : sum$ op $sum$
+\item $op :$ $=$ | $\le$ | $<$
+\item $sum : term$ | $sum + term$
+\item $term : identifier$ | $constant$ | $constant$ identifier
+\end{itemize}
 $2z_1 + 3z_2 \le 5 \wedge z_2 + 5z_2 - 10z_3 \ge 6 \wedge z1 + z3 = 3$
+\end{block}
+\begin{block}{Decison procedure}
+Simplex method
+\end{block}
 \end{frame}
 
-\begin{frame}{Домен}
+\begin{frame}{Bit-Vector Arithmetic}
+\begin{block}{Syntax}
 \begin{itemize}
-\item Целые числа
-\item Рациональные числа
+\item $formula: formula \wedge formula$ | $\lnot formula$ | $(formula)$ | $atom$
+\item $atom : term$ $rel$ $term$ | $Boolean$-$Identifier$ | $term[constant]$
+\item $rel : <$ | $=$
+\item $term$ : $term$ op $term$ | $identifier$ | $\sim term$ | $constant$ | $atom?term:term$ | $term[constant : constant]$ | $ext(term)$
+\item $op : + $| $-$ | $\cdot$ | $/$ | $<<$ | $>>$ | $\&$ | $|$ | $\bigoplus$ | $\circ$
 \end{itemize}
+\end{block}
 \end{frame}
 
-\begin{frame}{Домен}
-\begin{itemize}
-\item Целые числа - целочисленное линейное программирование
-\item Рациональные числа - симлекс метод
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Логика битовых векторов}
-\includegraphics[scale=0.5]{bit_syntax.png}
-\end{frame}
-
-\begin{frame}{Мотивация}
-\includegraphics[scale=0.5]{mot1.png}
-\end{frame}
-
-\begin{frame}{Мотивация}
-\includegraphics[scale=0.5]{mot1.png}\newline
-\includegraphics[scale=0.5]{mot2.png}
-\end{frame}
-
-\begin{frame}{Мотивация}
+\begin{frame}{Motivation}
 \includegraphics[scale=0.5]{mot1.png}\newline
 \includegraphics[scale=0.5]{mot2.png}\newline
 \includegraphics[scale=0.5]{mot3.png}
 \end{frame}
 
-\begin{frame}{Определения}
-\includegraphics[scale=0.5]{lambda.png}\newline
+\begin{frame}{Definitions}
+\begin{block}{$\lambda$-notation}
+$\lambda i \in \{0, \dots, l - 1\}.f(i)$
+\end{block}
+\begin{block}{Bit vector}
+A bit vector b is a vector of bits with a given length l (or dimension):\newline
+$b : \{0, \dots, l - 1\} \rightarrow \{0, 1\}$
+\end{block}
 \end{frame}
 
-\begin{frame}{Определения}
-\includegraphics[scale=0.5]{lambda.png}\newline
-\includegraphics[scale=0.5]{vector.png}\newline
+\begin{frame}{Definitions}
+\begin{block}{Operator <<|>>}
+$|_{[l]} : (bvec_l \times bvec_l ) \rightarrow bvec_l$\newline
+$a | b ::= \lambda i.(a_i \vee b_i)$
+\end{block}
+\begin{block}{Binary encoding}
+$x = \langle b\rangle_U$ - binary encoding, where\newline
+$\langle\cdot\rangle_U : bvec_l \rightarrow \{0, \dots, 2l - 1\}$,\newline
+$\langle b\rangle_U ::= \Sigma_{i = 0}^{l - 1}b_i\cdot 2^i$
+\end{block}
+\begin{block}{Two's complement}
+$x = \langle b\rangle_S$ - two's complement, where\newline
+$\langle\cdot\rangle_S : bvec_l \rightarrow \{-2^{l - 1}, \dots, 2{l-1} - 1\}$,\newline
+$\langle b\rangle_S ::= -2^{l-1} \cdot b_{l-1} + \Sigma_{i = 0}^{l - 2}b_i\cdot 2^i$
+\end{block}
+\includegraphics[scale=0.5]{Binary_encoding.png}\newline
 \end{frame}
 
-\begin{frame}{Определения}
-\includegraphics[scale=0.5]{lambda.png}\newline
-\includegraphics[scale=0.5]{vector.png}\newline
-\includegraphics[scale=0.5]{or1.png}\newline
-\includegraphics[scale=0.5]{or2.png}\newline
+\begin{frame}{Definitions}
+\includegraphics[scale=0.5]{Addition.png}\newline
+\includegraphics[scale=0.5]{Unary.png}\newline
 \end{frame}
 
-\begin{frame}{Определения}
-\includegraphics[scale=0.5]{lambda.png}\newline
-\includegraphics[scale=0.5]{vector.png}\newline
-\includegraphics[scale=0.5]{or1.png}\newline
-\includegraphics[scale=0.5]{or2.png}\newline
-\includegraphics[scale=0.5]{unsigned.png}\newline
+\begin{frame}{Definitions}
+\includegraphics[scale=0.5]{Multiplication.png}\newline
 \end{frame}
 
-\begin{frame}{Определения}
-\includegraphics[scale=0.5]{lambda.png}\newline
-\includegraphics[scale=0.5]{vector.png}\newline
-\includegraphics[scale=0.5]{or1.png}\newline
-\includegraphics[scale=0.5]{or2.png}\newline
-\includegraphics[scale=0.5]{unsigned.png}\newline
-\includegraphics[scale=0.5]{signed.png}\newline
-\end{frame}
-
-\begin{frame}{Определения}
-\includegraphics[scale=0.5]{sum.png}\newline
-\includegraphics[scale=0.5]{unary.png}\newline
-\end{frame}
-
-\begin{frame}{Определения}
-\includegraphics[scale=0.5]{rel.png}\newline
-\end{frame}
-
-\begin{frame}{Определения}
-\includegraphics[scale=0.5]{mul.png}\newline
-\end{frame}
-
-\begin{frame}{Определения}
+\begin{frame}{Definitions}
+Extension:\newline
 \includegraphics[scale=0.5]{ext.png}\newline
-\end{frame}
-
-\begin{frame}{Определения}
+Shifting:\newline
 \includegraphics[scale=0.5]{sh0.png}\newline
 \includegraphics[scale=0.5]{sh1.png}\newline
 \includegraphics[scale=0.5]{sh2.png}\newline
 \end{frame}
 
-\begin{frame}{Алгоритм}
+\begin{frame}{Algorithm}
+\begin{itemize}
+\item $T(\varphi)$ - the set of terms in $\varphi$
+\item $e(t)$ - vector of variables for a given $t \in T(\varphi)$
+\end{itemize}
 \includegraphics[scale=0.5]{algo.png}\newline
 \end{frame}
 
-\begin{frame}{Замены}
+\begin{frame}{Algorithm}
+For all constant:\newline
 \includegraphics[scale=0.5]{skel.png}\newline
+For <<|>> operator:\newline
 \includegraphics[scale=0.5]{or3.png}\newline
 \end{frame}
 
-\begin{frame}{Замены}
-\includegraphics[scale=0.5]{skel.png}\newline
-\end{frame}
-
-\begin{frame}{Замены}
+\begin{frame}{Algorithm}
+Full adder:\newline
 \includegraphics[scale=0.5]{sum1.png}\newline
+Carry bits:\newline
 \includegraphics[scale=0.5]{sum2.png}\newline
+Adder:\newline
 \includegraphics[scale=0.5]{sum3.png}\newline
 \includegraphics[scale=0.5]{sum4.png}\newline
 \end{frame}
 
-\begin{frame}{Замены}
+\begin{frame}{Relational Operators}
 \includegraphics[scale=0.5]{rel1.png}\newline
 \includegraphics[scale=0.5]{rel2.png}\newline
 \includegraphics[scale=0.5]{rel3.png}\newline
 \end{frame}
 
-\begin{frame}{Замены}
+\begin{frame}{Shifts}
 \includegraphics[scale=0.5]{ls.png}\newline
 \end{frame}
 
-\begin{frame}{Замены}
+\begin{frame}{Multiplication and Division}
 \includegraphics[scale=0.5]{mul1.png}\newline
 \includegraphics[scale=0.5]{div.png}\newline
+\end{frame}
+
+\begin{frame}{Some Operators Are Hard}
+\includegraphics[scale=0.5]{Size.png}\newline
 \end{frame}
 
 \begin{frame}
