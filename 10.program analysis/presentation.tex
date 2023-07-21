@@ -23,10 +23,10 @@
 }
 \begin{document}
 
-\title{Задачи разрешимости логических формул и приложения\newline Лекция 12. Анализ программ}
-\author{Роман Холин}
-\institute{Московский государственный университет}
-\date{Москва, 2022}
+\title{SAT/SMT solvers\newline  10. Program Analysis}
+\author{Roman Kholin}
+\institute{Lalambda}
+\date{Tbilisi, 2023}
 
 \begin{frame}
 \includegraphics[scale=0.5]{../decision-procedure.png}
@@ -34,7 +34,7 @@
 
 \frame{\titlepage}
 
-\begin{frame}{Зачем}
+\begin{frame}{Why}
 \begin{itemize}
 \item automatic test generation
 \item detection of dead code
@@ -42,18 +42,11 @@
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Анализ ограниченных программ}
-\begin{itemize}
-\item Путь исполнения программы - последовательность команд, выполненных во время запуска программы
-\item Трасса исполнения программы - последовательность состояний команд вдоль пути исполнения программы
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Пример}
+\begin{frame}{Example}
 \includegraphics[scale=0.5]{example1.png}
 \end{frame}
 
-\begin{frame}{Трасса}
+\begin{frame}{Example}
 \includegraphics[scale=0.5]{trace1.png}
 \end{frame}
 
@@ -65,28 +58,28 @@
 \includegraphics[scale=0.5]{path_constraint1.png}
 \end{frame}
 
-\begin{frame}{Пример}
+\begin{frame}{Example}
 \includegraphics[scale=0.5]{example1.png}
 \end{frame}
 
-\begin{frame}{Ошибка}
+\begin{frame}{Error}
 $i_1 = 0 \wedge \lnot (0 \le i_1 \wedge i_1 < N_0)$\newline
 \end{frame}
 
-\begin{frame}{Ошибка}
+\begin{frame}{Error}
 $i_1 = 0 \wedge \lnot (0 \le i_1 \wedge i_1 < N_0)$\newline
 $\{i_1 := 0, N_0 := 0\}$
 \end{frame}
 
-\begin{frame}{Другая трасса}
+\begin{frame}{Another trace}
 \includegraphics[scale=0.5]{trace2.png}
 \end{frame}
 
-\begin{frame}{Path constraint}
+\begin{frame}{Another trace}
 \includegraphics[scale=0.5]{path_constraint2.png}
 \end{frame}
 
-\begin{frame}{Оценка входных данных}
+\begin{frame}{Assigment of input}
 \includegraphics[scale=0.5]{eval.png}
 \end{frame}
 
@@ -102,23 +95,23 @@ $\{i_1 := 0, N_0 := 0\}$
 \includegraphics[scale=0.5]{path_constraint3.png}
 \end{frame}
 
-\begin{frame}{Неудачный пример аппроксимации}
+\begin{frame}{Bad approximation}
 \includegraphics[scale=0.5]{example3.png}
 \end{frame}
 
-\begin{frame}{Конечный автомат миханизма взятия лока}
+\begin{frame}{Automat of lock}
 \includegraphics[scale=0.5]{lock_automaton.png}
 \end{frame}
 
-\begin{frame}{Добавление assert-ов}
+\begin{frame}{Asserts}
 \includegraphics[scale=0.5]{asserts.png}
 \end{frame}
 
-\begin{frame}{Инварианты цикла}
+\begin{frame}{Invariants}
 \includegraphics[scale=0.45]{li1.png}
 \end{frame}
 
-\begin{frame}{Инварианты цикла}
+\begin{frame}{Invariants}
 \includegraphics[scale=0.45]{li2.png}
 \end{frame}
 
