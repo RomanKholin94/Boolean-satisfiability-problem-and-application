@@ -27,8 +27,8 @@
 
 \title{SAT/SMT solvers\newline  2. Conflict-Driven Clause Learning algorithm}
 \author{Roman Kholin}
-\institute{Lalambda}
-\date{Tbilisi, 2023}
+\institute{Lomonosov Moscow State University}
+\date{Moscow, 2023}
 
 \begin{frame}
 \includegraphics[scale=0.5]{../decision-procedure.png}
@@ -106,7 +106,8 @@ where $a_1, \dots, a_n, b_1, \dots, b_m$ are literals and $\beta$ is a variable.
 \end{frame}
 
 \begin{frame}{Analyze conflict}
-\includegraphics[scale=0.25]{Analyze-Conflict.png}
+\includegraphics[scale=0.25]{Analyze-Conflict.png}\newline
+Stop-criterion-met(cl) is to return true if and only if cl contains the negation of the first UIP as its single literal at the current decision level.\newline
 \includegraphics[scale=0.5]{UIP1.png}
 \end{frame}
 
