@@ -24,10 +24,10 @@
 
 \begin{document}
 
-\title{SAT/SMT solvers\newline  1. Arrays}
+\title{SAT/SMT solvers\newline 6. Arrays}
 \author{Roman Kholin}
-\institute{Lalambda}
-\date{Tbilisi, 2023}
+\institute{Lomonosov Moscow State University}
+\date{Moscow, 2023}
 
 \begin{frame}
 \includegraphics[scale=0.5]{../decision-procedure.png}
@@ -205,6 +205,49 @@ $(z < i \implies F_a(z) = 0) \wedge$\newline
 $F_{a'}(i) = 0 \wedge (z \ne i \implies F_{a'}(z) = F_a(z))\implies$\newline
 $(z \le i \wedge F_{a'}(z) \ne 0)$\newline
 By distinguishing the three cases $z < i$, $z = i$, and $z > i$, it is easy to see that this formula is unsatisfiable
+\end{frame}
+
+\begin{frame}{Weak equivalence graph and $Cond_i(p)$}
+\includegraphics[scale=0.5]{weak1.png}\newline
+\includegraphics[scale=0.5]{weak2.png}\newline
+$Cond_i(p)$:
+\begin{itemize}
+\item For an unlabeled edge from $a$ to $b$, add the constraint $a$ = $b$
+\item For an edge labeled with $k$, add the constraint $i \neq k$
+\end{itemize}
+$Cond_i (p) = i \neq j \wedge i \neq k$
+\end{frame}
+
+\begin{frame}{Lazy Instantiation of the Read-Over-Write Axiom}
+\includegraphics[scale=0.5]{array-encoding-procedure.png}\newline
+\end{frame}
+
+\begin{frame}{Lazy Instantiation of the Read-Over-Write Axiom}
+\includegraphics[scale=0.5]{array-encoding-procedure.png}\newline
+Example:\newline
+\includegraphics[scale=0.5]{weak1.png}\newline
+\includegraphics[scale=0.5]{weak2.png}\newline
+\end{frame}
+
+\begin{frame}{Weak equivalence graph and $Cond_{i}^{u}(p)$}
+\begin{itemize}
+\item Find the array term just before the first edge on $p$ labeled with $i$ or with an index $j$ such that $j ~ i$. Denote this term by $first$, and denote the prefix of $p$ up to the edge with $p'$
+\item Find the array term just after the last update on $p$ labeled with $i$ or with an index $k$ such that $k ~ i$. Denote this term by $last$, and denote the suffix of the path $p$ after this edge with $p''$
+\item Check that $first[i]$ is equal to $last[i]$
+\end{itemize}
+\includegraphics[scale=0.5]{graph2.png}\newline
+If there is no edge with an index label that is equal to $i$ in $p$, then $Cond_{i}^{u}(p) = Cond_i(p)$\newline
+Otherwise: $Cond_{i}^{u}(p) = Cond_i(p') \wedge first[i] = last[i] \wedge Cond_i(p'')$
+\end{frame}
+
+\begin{frame}{Lazy Instantiation of the Extensionality Rule}
+\includegraphics[scale=0.5]{extensional-array-encoding.png}\newline
+\end{frame}
+
+\begin{frame}{Lazy Instantiation of the Extensionality Rule}
+\includegraphics[scale=0.5]{extensional-array-encoding.png}\newline
+Example:\newline
+\includegraphics[scale=0.5]{ex3.png}\newline
 \end{frame}
 
 \begin{frame}
