@@ -14,7 +14,8 @@ BISON   = bison
 
 CFLAGS  =
 LDFLAGS =
-OBJS    = parsing/string_container.o parsing/dstring.o \
+OBJS    = graph/graph.o \
+          parsing/string_container.o parsing/dstring.o \
           parsing/scanner.o parsing/parser.o parsing/ast.o \
           parsing/parsing_context.o \
           sat/cnf.o sat/dimacs_cnf.o \
