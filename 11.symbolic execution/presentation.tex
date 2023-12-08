@@ -23,10 +23,10 @@
 }
 \begin{document}
 
-\title{SAT/SMT solvers\newline  11. Symbolic execution}
+\title{SAT/SMT solvers\ \newline 11. Symbolic execution}
 \author{Roman Kholin}
-\institute{Lalambda}
-\date{Tbilisi, 2023}
+\institute{Lomonosov Moscow State University}
+\date{Moscow, 2023}
 
 \begin{frame}
 \includegraphics[scale=0.5]{../decision-procedure.png}
@@ -34,28 +34,7 @@
 
 \frame{\titlepage}
 
-\begin{frame}{Мотивация}
-\begin{itemize}
-\item Хочется автоматизировать генерацию тестовых примеров
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Мотивация}
-\begin{itemize}
-\item Хочется автоматизировать генерацию тестовых примеров
-\item Хочется, чтобы тесты посещали все строчки кода (LOC метрика)
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Мотивация}
-\begin{itemize}
-\item Хочется автоматизировать генерацию тестовых примеров
-\item Хочется, чтобы тесты посещали все строчки кода (LOC метрика)
-\item Хочется, чтобы тесты посещали все пути обхода программы
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Что можно делать}
+\begin{frame}{Whe could used}
 \begin{itemize}
 \item Dynamic analysis
 \item Program correctness
@@ -64,7 +43,7 @@
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Конкретное исполнение (Concrete execution)}
+\begin{frame}[fragile]{Concrete execution}
 \begin{minipage}{0.49\textwidth}
 \begin{lstlisting}[language=C++]
 void foo(int x, int y) {
@@ -94,7 +73,7 @@ $X$ & $Y$ & $T$ \\
 \end{minipage}
 \end{frame}
 
-\begin{frame}[fragile]{Конкретное исполнение (Concrete execution)}
+\begin{frame}[fragile]{Concrete execution}
 \begin{minipage}{0.49\textwidth}
 \begin{lstlisting}[language=C++]
 void foo(int x, int y) {
@@ -124,7 +103,7 @@ $X$ & $Y$ & $T$ \\
 \end{minipage}
 \end{frame}
 
-\begin{frame}[fragile]{Конкретное исполнение (Concrete execution)}
+\begin{frame}[fragile]{Concrete execution}
 \begin{minipage}{0.49\textwidth}
 \begin{lstlisting}[language=C++]
 void foo(int x, int y) {
@@ -154,7 +133,7 @@ $X$ & $Y$ & $T$ \\
 \end{minipage}
 \end{frame}
 
-\begin{frame}[fragile]{Конкретное исполнение (Concrete execution)}
+\begin{frame}[fragile]{Concrete execution}
 \begin{minipage}{0.49\textwidth}
 \begin{lstlisting}[language=C++]
 void foo(int x, int y) {
@@ -184,13 +163,13 @@ $X$ & $Y$ & $T$ \\
 \end{minipage}
 \end{frame}
 
-\begin{frame}{Пути исполнения программы}
+\begin{frame}{Execution pathes}
 \begin{minipage}{0.49\textwidth}
 \begin{itemize}
-\item Программа может быть представленна в виде бинарного дерева - т.н. Вычислительного дерева
-\item Каждая вершина - выполнение условного оператора
-\item Каждое ребро - выполнение последователнисти команд, которые не являются условным оператором
-\item Кадый путь от корня - делит множество входных данных на классы эквивалентности
+\item Program could be representerd as binary tree - computed tree
+\item Every node corespond to condition operator
+\item Every edge corespond to execution of comands (each of then is not a condition operator)
+\item Each path from root to leaf correspond to equivalence class
 \end{itemize}
 \end{minipage}
 \begin{minipage}{0.49\textwidth}
@@ -198,7 +177,7 @@ $X$ & $Y$ & $T$ \\
 \end{minipage}
 \end{frame}
 
-\begin{frame}[fragile]{Пример дерева}
+\begin{frame}[fragile]{Example}
 \begin{minipage}{0.49\textwidth}
 \begin{lstlisting}[language=C++]
 void test(int x, int y) {
@@ -217,7 +196,7 @@ void test(int x, int y) {
 \end{minipage}
 \end{frame}
 
-\begin{frame}[fragile]{Существующие подходы}
+\begin{frame}[fragile]{Existed approach}
 \begin{minipage}{0.49\textwidth}
 \begin{lstlisting}[language=C++]
  void test(int x) {
@@ -229,13 +208,13 @@ void test(int x, int y) {
 \end{minipage}
 \begin{minipage}{0.49\textwidth}
 \begin{itemize}
-\item Рандомизированное тестирование
-\item Проблема: вероятность ошибка очень мала
+\item Random testion
+\item The probability to detect error is very low
 \end{itemize}
 \end{minipage}
 \end{frame}
 
-\begin{frame}[fragile]{Символическое исполнение (Symbolic execution)}
+\begin{frame}[fragile]{Symbolic execution}
 \begin{minipage}{0.49\textwidth}
 \begin{lstlisting}[language=C++]
 void foo(int x, int y) {
@@ -265,7 +244,7 @@ $x$ & $y$ & 0 \\
 \end{minipage}
 \end{frame}
 
-\begin{frame}[fragile]{Символическое исполнение (Symbolic execution)}
+\begin{frame}[fragile]{Symbolic execution}
 \begin{minipage}{0.49\textwidth}
 \begin{lstlisting}[language=C++]
 void foo(int x, int y) {
@@ -302,7 +281,7 @@ t_0 =
 \end{minipage}
 \end{frame}
 
-\begin{frame}[fragile]{Символическое исполнение (Symbolic execution)}
+\begin{frame}[fragile]{Symbolic execution}
 \begin{minipage}{0.49\textwidth}
 \begin{lstlisting}[language=C++]
 void foo(int x, int y) {
@@ -340,7 +319,7 @@ $t_0 < x?$
 \end{minipage}
 \end{frame}
 
-\begin{frame}[fragile]{Символическое исполнение (Symbolic execution)}
+\begin{frame}[fragile]{Symbolic execution}
 \begin{minipage}{0.49\textwidth}
 \begin{lstlisting}[language=C++]
 void foo(int x, int y) {
@@ -383,7 +362,7 @@ x \le y \implies t_0 = y \implies t_0 \ge x \\
 \end{minipage}
 \end{frame}
 
-\begin{frame}[fragile]{Символическое исполнение (Symbolic execution)}
+\begin{frame}[fragile]{Symbolic execution}
 \begin{minipage}{0.49\textwidth}
 \begin{lstlisting}[language=C++]
 void foo(int x, int y) {
@@ -413,7 +392,7 @@ $x$ & $y$ & $t_0$ \\
 \end{minipage}
 \end{frame}
 
-\begin{frame}[fragile]{Символическое исполнение (Symbolic execution)}
+\begin{frame}[fragile]{Symbolic execution}
 \begin{minipage}{0.49\textwidth}
 \begin{lstlisting}[language=C++]
 void foo(int x, int y) {
@@ -450,7 +429,7 @@ t_0 =
 \end{minipage}
 \end{frame}
 
-\begin{frame}[fragile]{Символическое исполнение (Symbolic execution)}
+\begin{frame}[fragile]{Symbolic execution}
 \begin{minipage}{0.49\textwidth}
 \begin{lstlisting}[language=C++]
 void foo(int x, int y) {
@@ -494,7 +473,7 @@ $x > y$ - solution
 \end{minipage}
 \end{frame}
 
-\begin{frame}[fragile]{Символическое исполнение (Symbolic execution)}
+\begin{frame}[fragile]{Symbolic execution}
 \begin{minipage}{0.49\textwidth}
 \begin{lstlisting}[language=C++]
 void testme(int x) {
@@ -510,10 +489,10 @@ void testme(int x) {
 
 
 \begin{frame}[fragile]{Concolic execution}
-Concolic execution (или dynamic symbolic execution):
+Concolic execution (or dynamic symbolic execution):
 \begin{itemize}
-\item Начнем с рандомных входных данных
-\item Поддерживаем конкретный и символьные переменные
+\item Start with random input data
+\item Track the conrete and symbolic variables
 \end{itemize}
 \end{frame}
 
@@ -1009,12 +988,7 @@ $queue = \{\}$
 \end{minipage}
 \end{frame}
 
-\begin{frame}{Пример}
-Какие ограничения могут повстречатся при consolic execution?
-\includegraphics[scale=0.35]{quiz.png}
-\end{frame}
-
-\begin{frame}[fragile]{Пример}
+\begin{frame}[fragile]{Example}
 \begin{minipage}{0.49\textwidth}
 \begin{lstlisting}[language=C++]
 int test(int x) {
@@ -1031,11 +1005,10 @@ int test(int x) {
 \end{lstlisting}
 \end{minipage}
 \begin{minipage}{0.49\textwidth}
-Какие ограничения появлялись и были разрешены солвером?
 \end{minipage}
 \end{frame}
 
-\begin{frame}[fragile]{Пример}
+\begin{frame}[fragile]{Exampl}
 \begin{minipage}{0.40\textwidth}
 \begin{lstlisting}[language=C++]
 int foo(int v) {
@@ -1051,25 +1024,24 @@ void test(int x, int y) {
 \end{minipage}
 \hfill
 \begin{minipage}{0.40\textwidth}
-Можно символические переменные заменить на конкретные
 \end{minipage}
 \end{frame}
 
-\begin{frame}{Преимущества и недостатки Consolic Execution}
+\begin{frame}{Consolic Execution}
 \begin{itemize}
-\item Может никогда не остановиться
-\item Метод полный - если мы достигаем ошибки, то программа достигает её на некоторых данных
-\item Не надежный - если анализ останавливается и не нашёл ошибок, то это не значит, что их нет
+\item Could never stop execution
+\item Sound
+\item Not complete
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Реализация}
+\begin{frame}[fragile]{Implementation}
 \begin{lstlisting}[language=python,escapechar=@]
 a = b + c
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile]{Реализация}
+\begin{frame}[fragile]{Implementation}
 \begin{lstlisting}[language=python,escapechar=@]
 class concolic_int(int):
 def __new__(cls, val, sym):
@@ -1089,23 +1061,23 @@ def __add__(self, other):
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile]{Реализация}
-Как int заменить на concolic\_int?
+\begin{frame}[fragile]{Implementation}
+How could one change int on concolic\_int?
 \end{frame}
 
-\begin{frame}[fragile]{Реализация}
+\begin{frame}[fragile]{Implementation}
 \begin{lstlisting}[language=python,escapechar=@]
 a = b + c
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile]{Реализация}
+\begin{frame}[fragile]{Implementation}
 \begin{lstlisting}[language=python,escapechar=@]
 a = plus(b, c)
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile]{Реализация}
+\begin{frame}[fragile]{Implementation}
 \begin{lstlisting}[language=python,escapechar=@]
 function plus(x, y) {
     if (x isinstanceof Concolic) {
@@ -1127,8 +1099,8 @@ function plus(x, y) {
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile]{Реализация}
-Как кодировать пути?
+\begin{frame}[fragile]{Implementation}
+How to ecode the pathes?
 \end{frame}
 
 \begin{frame}{Examples}
