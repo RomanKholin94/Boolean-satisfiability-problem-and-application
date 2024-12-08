@@ -267,7 +267,7 @@ void graph<N, E>::remove_in_edges(unsigned n)
       it=node.in.begin();
       it!=node.in.end();
       it++)
-    nodes[*it].out.erase(n);
+    nodes[it->first].out.erase(n);
     
   node.in.clear();
 }
@@ -294,7 +294,7 @@ void graph<N, E>::remove_out_edges(unsigned n)
       it=node.out.begin();
       it!=node.out.end();
       it++)
-    nodes[*it].in.erase(n);
+    nodes[it->first].in.erase(n);
   
   node.out.clear();
 }
